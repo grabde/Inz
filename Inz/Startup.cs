@@ -42,7 +42,6 @@ namespace Inz
             app.UseRouting();
 
            // app.UseAuthorization();
-           //czytnik
 
             app.UseEndpoints(endpoints =>
             {

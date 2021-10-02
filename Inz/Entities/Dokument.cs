@@ -8,7 +8,6 @@ namespace Inz.Entities
     public class Dokument
     {
         public int Id { get; set; }
-        public int ProduktId { get; set; }
         public virtual TypDokumentu TypDokumentu { get; set; }
         public string NazwaKonrahenta { get; set; }
         public int Ilosc { get; set; }

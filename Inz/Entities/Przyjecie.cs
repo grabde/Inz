@@ -13,6 +13,6 @@ namespace Inz.Entities
         public string KtoWystawil { get; set; }
         public string KtoObsluguje { get; set; }
 
-        public virtual List<Produkt> Produkty { get; set; }
+        public virtual List<ProduktPrzyjecie> Produkty { get; set; }
     }
 }

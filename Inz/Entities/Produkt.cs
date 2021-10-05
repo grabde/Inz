@@ -17,9 +17,9 @@ namespace Inz.Entities
         public string KodEan { get; set; }
         public string Kategoria { get; set; }
 
-        public virtual List<Dokument> Dokumenty { get; set; }
+        public virtual List<DokumentProdukt> Dokumenty { get; set; }
 
-        public virtual List<Przyjecie> Przyjecia { get; set; }
+        public virtual List<ProduktPrzyjecie> Przyjecia { get; set; }
 
         public virtual Lokalizacja Lokalizacja { get; set; }
     }

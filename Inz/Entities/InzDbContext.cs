@@ -16,6 +16,7 @@ namespace Inz.Entities
         public DbSet<Przyjecie> Przyjecie { get; set; }
         public DbSet<TypDokumentu> TypDokumentu { get; set; }
 
+        //tutaj możemy dodać właściwości kolumn
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Dokument>()
@@ -31,6 +32,12 @@ namespace Inz.Entities
                 .Property(r => r.KodEan)
                 .IsRequired()
                 .HasMaxLength(13);
+
+            modelBuilder.Entity<DokumentProdukt>()
+                .HasKey(c => new { c.DokumentId, c.ProduktId });
+
+            modelBuilder.Entity<ProduktPrzyjecie>()
+                .HasKey(c => new { c.ProduktId, c.PrzyjecieId });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -10,6 +10,6 @@ namespace Inz.Entities
         public int Id { get; set; }
         public string Opis { get; set; }
 
-        public virtual List<Dokument> Dokumenty { get; set; }
+        //public virtual List<Dokument> Dokumenty { get; set; }
     }
 }

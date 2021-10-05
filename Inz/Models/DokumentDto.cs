@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Inz.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Inz.Entities
+namespace Inz.Models
 {
-    public class Dokument
+    public class DokumentDto
     {
         public int Id { get; set; }
-        public virtual TypDokumentu TypDokumentu { get; set; }
+        public int TypDokumentu { get; set; }
         public string NazwaKonrahenta { get; set; }
         public int Ilosc { get; set; }
         public string KodEan { get; set; }

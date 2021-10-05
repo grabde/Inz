@@ -10,6 +10,6 @@ namespace Inz.Entities
         public int Id { get; set; }
         public int NumerRegalu { get; set; }
 
-        public virtual List<Produkt> Produkty { get; set; }
+        //public virtual List<Produkt> Produkty { get; set; }
     }
 }

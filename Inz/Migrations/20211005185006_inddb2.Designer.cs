@@ -4,14 +4,16 @@ using Inz.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Inz.Migrations
 {
     [DbContext(typeof(InzDbContext))]
-    partial class InzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211005185006_inddb2")]
+    partial class inddb2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,7 +176,7 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.Dokument", b =>
                 {
                     b.HasOne("Inz.Entities.TypDokumentu", "TypDokumentu")
-                        .WithMany()
+                        .WithMany("Dokumenty")
                         .HasForeignKey("TypDokumentuId");
 
                     b.Navigation("TypDokumentu");
@@ -198,7 +200,7 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.Produkt", b =>
                 {
                     b.HasOne("Inz.Entities.Lokalizacja", "Lokalizacja")
-                        .WithMany()
+                        .WithMany("Produkty")
                         .HasForeignKey("LokalizacjaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -226,6 +228,11 @@ namespace Inz.Migrations
                     b.Navigation("Produkty");
                 });
 
+            modelBuilder.Entity("Inz.Entities.Lokalizacja", b =>
+                {
+                    b.Navigation("Produkty");
+                });
+
             modelBuilder.Entity("Inz.Entities.Produkt", b =>
                 {
                     b.Navigation("Dokumenty");
@@ -236,6 +243,11 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.Przyjecie", b =>
                 {
                     b.Navigation("Produkty");
+                });
+
+            modelBuilder.Entity("Inz.Entities.TypDokumentu", b =>
+                {
+                    b.Navigation("Dokumenty");
                 });
 #pragma warning restore 612, 618
         }

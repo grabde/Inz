@@ -8,11 +8,13 @@ namespace Inz.Entities
 {
     public class InzDbContext : DbContext
     {
-        private string _connectionString = "Server=ZDG;Database=InzDb;Trusted_Connection=True;";
+        private string _connectionString = "Server=ZDG;Database=InzDb3;Trusted_Connection=True;";
 
         public DbSet<Dokument> Dokument { get; set; }
+        public DbSet<DokumentProdukt> DokumentProdukt { get; set; }
         public DbSet<Lokalizacja> Lokalizacja { get; set; }
         public DbSet<Produkt> Produkt { get; set; }
+        public DbSet<ProduktPrzyjecie> ProduktPrzyjecie { get; set; }
         public DbSet<Przyjecie> Przyjecie { get; set; }
         public DbSet<TypDokumentu> TypDokumentu { get; set; }
 

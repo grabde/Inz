@@ -28,7 +28,9 @@ namespace Inz
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IInzService, InzService>();
+            services.AddScoped<IDokumentService, DokumentService>();
+            services.AddScoped<IPrzyjecieService, PrzyjecieService>();
+            services.AddScoped<IProduktService, ProduktService>();
             services.AddDbContext<InzDbContext>();
             services.AddAutoMapper(this.GetType().Assembly);
         }

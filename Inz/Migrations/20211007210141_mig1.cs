@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Inz.Migrations
 {
-    public partial class Init : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,6 @@ namespace Inz.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProduktId = table.Column<int>(type: "int", nullable: false),
                     DataPrzyjazdu = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataWypakowania = table.Column<DateTime>(type: "datetime2", nullable: false),
                     KtoWystawil = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -61,9 +60,9 @@ namespace Inz.Migrations
                     IloscZarezerwowana = table.Column<int>(type: "int", nullable: false),
                     IloscDostepna = table.Column<int>(type: "int", nullable: false),
                     Cena = table.Column<double>(type: "float", nullable: false),
-                    LokalizacjaId = table.Column<int>(type: "int", nullable: false),
                     KodEan = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Kategoria = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Kategoria = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LokalizacjaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,7 +72,7 @@ namespace Inz.Migrations
                         column: x => x.LokalizacjaId,
                         principalTable: "Lokalizacja",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,19 +81,17 @@ namespace Inz.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProduktId = table.Column<int>(type: "int", nullable: false),
-                    TypDokumentuId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypDokumentuId = table.Column<int>(type: "int", nullable: true),
                     NazwaKonrahenta = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Ilosc = table.Column<int>(type: "int", nullable: false),
-                    KodEan = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    TypDokumentuId1 = table.Column<int>(type: "int", nullable: true)
+                    KodEan = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dokument", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dokument_TypDokumentu_TypDokumentuId1",
-                        column: x => x.TypDokumentuId1,
+                        name: "FK_Dokument_TypDokumentu_TypDokumentuId",
+                        column: x => x.TypDokumentuId,
                         principalTable: "TypDokumentu",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -104,21 +101,21 @@ namespace Inz.Migrations
                 name: "ProduktPrzyjecie",
                 columns: table => new
                 {
-                    ProduktyId = table.Column<int>(type: "int", nullable: false),
-                    PrzyjeciaId = table.Column<int>(type: "int", nullable: false)
+                    ProduktId = table.Column<int>(type: "int", nullable: false),
+                    PrzyjecieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProduktPrzyjecie", x => new { x.ProduktyId, x.PrzyjeciaId });
+                    table.PrimaryKey("PK_ProduktPrzyjecie", x => new { x.ProduktId, x.PrzyjecieId });
                     table.ForeignKey(
-                        name: "FK_ProduktPrzyjecie_Produkt_ProduktyId",
-                        column: x => x.ProduktyId,
+                        name: "FK_ProduktPrzyjecie_Produkt_ProduktId",
+                        column: x => x.ProduktId,
                         principalTable: "Produkt",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProduktPrzyjecie_Przyjecie_PrzyjeciaId",
-                        column: x => x.PrzyjeciaId,
+                        name: "FK_ProduktPrzyjecie_Przyjecie_PrzyjecieId",
+                        column: x => x.PrzyjecieId,
                         principalTable: "Przyjecie",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -128,35 +125,35 @@ namespace Inz.Migrations
                 name: "DokumentProdukt",
                 columns: table => new
                 {
-                    DokumentyId = table.Column<int>(type: "int", nullable: false),
-                    ProduktyId = table.Column<int>(type: "int", nullable: false)
+                    DokumentId = table.Column<int>(type: "int", nullable: false),
+                    ProduktId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DokumentProdukt", x => new { x.DokumentyId, x.ProduktyId });
+                    table.PrimaryKey("PK_DokumentProdukt", x => new { x.DokumentId, x.ProduktId });
                     table.ForeignKey(
-                        name: "FK_DokumentProdukt_Dokument_DokumentyId",
-                        column: x => x.DokumentyId,
+                        name: "FK_DokumentProdukt_Dokument_DokumentId",
+                        column: x => x.DokumentId,
                         principalTable: "Dokument",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DokumentProdukt_Produkt_ProduktyId",
-                        column: x => x.ProduktyId,
+                        name: "FK_DokumentProdukt_Produkt_ProduktId",
+                        column: x => x.ProduktId,
                         principalTable: "Produkt",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dokument_TypDokumentuId1",
+                name: "IX_Dokument_TypDokumentuId",
                 table: "Dokument",
-                column: "TypDokumentuId1");
+                column: "TypDokumentuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DokumentProdukt_ProduktyId",
+                name: "IX_DokumentProdukt_ProduktId",
                 table: "DokumentProdukt",
-                column: "ProduktyId");
+                column: "ProduktId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produkt_LokalizacjaId",
@@ -164,9 +161,9 @@ namespace Inz.Migrations
                 column: "LokalizacjaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProduktPrzyjecie_PrzyjeciaId",
+                name: "IX_ProduktPrzyjecie_PrzyjecieId",
                 table: "ProduktPrzyjecie",
-                column: "PrzyjeciaId");
+                column: "PrzyjecieId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

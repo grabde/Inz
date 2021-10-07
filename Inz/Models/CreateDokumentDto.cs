@@ -6,7 +6,7 @@ using Inz.Entities;
 
 namespace Inz.Models
 {
-    public class DokumentDto
+    public class CreateDokumentDto
     {
         public int Id { get; set; }
         public int TypDokumentu { get; set; }

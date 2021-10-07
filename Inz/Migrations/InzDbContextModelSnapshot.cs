@@ -104,7 +104,7 @@ namespace Inz.Migrations
                     b.Property<string>("KodEan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LokalizacjaId")
+                    b.Property<int?>("LokalizacjaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nazwa")
@@ -199,9 +199,7 @@ namespace Inz.Migrations
                 {
                     b.HasOne("Inz.Entities.Lokalizacja", "Lokalizacja")
                         .WithMany()
-                        .HasForeignKey("LokalizacjaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LokalizacjaId");
 
                     b.Navigation("Lokalizacja");
                 });

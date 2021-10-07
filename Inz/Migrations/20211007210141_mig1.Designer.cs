@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inz.Migrations
 {
     [DbContext(typeof(InzDbContext))]
-    [Migration("20210930203906_Init")]
-    partial class Init
+    [Migration("20211007210141_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Inz.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DokumentProdukt", b =>
-                {
-                    b.Property<int>("DokumentyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProduktyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DokumentyId", "ProduktyId");
-
-                    b.HasIndex("ProduktyId");
-
-                    b.ToTable("DokumentProdukt");
-                });
 
             modelBuilder.Entity("Inz.Entities.Dokument", b =>
                 {
@@ -56,20 +41,29 @@ namespace Inz.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("ProduktId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TypDokumentuId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TypDokumentuId1")
+                    b.Property<int?>("TypDokumentuId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypDokumentuId1");
+                    b.HasIndex("TypDokumentuId");
 
                     b.ToTable("Dokument");
+                });
+
+            modelBuilder.Entity("Inz.Entities.DokumentProdukt", b =>
+                {
+                    b.Property<int>("DokumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProduktId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DokumentId", "ProduktId");
+
+                    b.HasIndex("ProduktId");
+
+                    b.ToTable("DokumentProdukt");
                 });
 
             modelBuilder.Entity("Inz.Entities.Lokalizacja", b =>
@@ -112,7 +106,7 @@ namespace Inz.Migrations
                     b.Property<string>("KodEan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LokalizacjaId")
+                    b.Property<int?>("LokalizacjaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nazwa")
@@ -123,6 +117,21 @@ namespace Inz.Migrations
                     b.HasIndex("LokalizacjaId");
 
                     b.ToTable("Produkt");
+                });
+
+            modelBuilder.Entity("Inz.Entities.ProduktPrzyjecie", b =>
+                {
+                    b.Property<int>("ProduktId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PrzyjecieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProduktId", "PrzyjecieId");
+
+                    b.HasIndex("PrzyjecieId");
+
+                    b.ToTable("ProduktPrzyjecie");
                 });
 
             modelBuilder.Entity("Inz.Entities.Przyjecie", b =>
@@ -144,9 +153,6 @@ namespace Inz.Migrations
                     b.Property<string>("KtoWystawil")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProduktId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Przyjecie");
@@ -167,79 +173,69 @@ namespace Inz.Migrations
                     b.ToTable("TypDokumentu");
                 });
 
-            modelBuilder.Entity("ProduktPrzyjecie", b =>
+            modelBuilder.Entity("Inz.Entities.Dokument", b =>
                 {
-                    b.Property<int>("ProduktyId")
-                        .HasColumnType("int");
+                    b.HasOne("Inz.Entities.TypDokumentu", "TypDokumentu")
+                        .WithMany()
+                        .HasForeignKey("TypDokumentuId");
 
-                    b.Property<int>("PrzyjeciaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProduktyId", "PrzyjeciaId");
-
-                    b.HasIndex("PrzyjeciaId");
-
-                    b.ToTable("ProduktPrzyjecie");
+                    b.Navigation("TypDokumentu");
                 });
 
-            modelBuilder.Entity("DokumentProdukt", b =>
+            modelBuilder.Entity("Inz.Entities.DokumentProdukt", b =>
                 {
                     b.HasOne("Inz.Entities.Dokument", null)
-                        .WithMany()
-                        .HasForeignKey("DokumentyId")
+                        .WithMany("Produkty")
+                        .HasForeignKey("DokumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Inz.Entities.Produkt", null)
+                        .WithMany("Dokumenty")
+                        .HasForeignKey("ProduktId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Inz.Entities.Produkt", b =>
+                {
+                    b.HasOne("Inz.Entities.Lokalizacja", "Lokalizacja")
                         .WithMany()
-                        .HasForeignKey("ProduktyId")
+                        .HasForeignKey("LokalizacjaId");
+
+                    b.Navigation("Lokalizacja");
+                });
+
+            modelBuilder.Entity("Inz.Entities.ProduktPrzyjecie", b =>
+                {
+                    b.HasOne("Inz.Entities.Produkt", null)
+                        .WithMany("Przyjecia")
+                        .HasForeignKey("ProduktId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Inz.Entities.Przyjecie", null)
+                        .WithMany("Produkty")
+                        .HasForeignKey("PrzyjecieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Inz.Entities.Dokument", b =>
                 {
-                    b.HasOne("Inz.Entities.TypDokumentu", "TypDokumentu")
-                        .WithMany("Dokumenty")
-                        .HasForeignKey("TypDokumentuId1");
-
-                    b.Navigation("TypDokumentu");
+                    b.Navigation("Produkty");
                 });
 
             modelBuilder.Entity("Inz.Entities.Produkt", b =>
                 {
-                    b.HasOne("Inz.Entities.Lokalizacja", "Lokalizacja")
-                        .WithMany("Produkty")
-                        .HasForeignKey("LokalizacjaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Dokumenty");
 
-                    b.Navigation("Lokalizacja");
+                    b.Navigation("Przyjecia");
                 });
 
-            modelBuilder.Entity("ProduktPrzyjecie", b =>
-                {
-                    b.HasOne("Inz.Entities.Produkt", null)
-                        .WithMany()
-                        .HasForeignKey("ProduktyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Inz.Entities.Przyjecie", null)
-                        .WithMany()
-                        .HasForeignKey("PrzyjeciaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Inz.Entities.Lokalizacja", b =>
+            modelBuilder.Entity("Inz.Entities.Przyjecie", b =>
                 {
                     b.Navigation("Produkty");
-                });
-
-            modelBuilder.Entity("Inz.Entities.TypDokumentu", b =>
-                {
-                    b.Navigation("Dokumenty");
                 });
 #pragma warning restore 612, 618
         }

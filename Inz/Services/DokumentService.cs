@@ -77,6 +77,8 @@ namespace Inz.Services
             this._dbContext.Dokument.Add(dokument);
             this._dbContext.SaveChanges();
 
+            this._logger.LogWarning($"Dokument z id: {dokument.Id} CREATE wywołany");
+
             dokument = this._dbContext
                 .Dokument
                 .FirstOrDefault(r => r.Id == dokument.Id);
@@ -84,8 +86,6 @@ namespace Inz.Services
             this._dbContext.SaveChanges();
 
             var dokumentDto = this._mapper.Map<DokumentDto>(dokument);
-
-            this._logger.LogWarning($"Dokument z id: {dokument.Id} CREATE wywołany");
 
             return dokumentDto;
         }

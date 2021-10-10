@@ -79,6 +79,8 @@ namespace Inz.Services
             this._dbContext.Produkt.Add(produkt);
             this._dbContext.SaveChanges();
 
+            this._logger.LogWarning($"Produkt z id: {produkt.Id} CREATE wywołany");
+
             produkt = this._dbContext
                 .Produkt
                 .FirstOrDefault(r => r.Id == produkt.Id);
@@ -87,8 +89,6 @@ namespace Inz.Services
             this._dbContext.SaveChanges();
 
             var produktDto = this._mapper.Map<ProduktDto>(produkt);
-
-            this._logger.LogWarning($"Produkt z id: {produkt.Id} CREATE wywołany");
 
             return produktDto;
         }

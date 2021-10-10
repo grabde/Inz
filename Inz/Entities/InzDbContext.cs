@@ -8,7 +8,7 @@ namespace Inz.Entities
 {
     public class InzDbContext : DbContext
     {
-        private string _connectionString = "Server=ZDG;Database=InzDb3;Trusted_Connection=True;";
+        private string _connectionString = "Server=ZDG;Database=InzDb;Trusted_Connection=True;";
 
         public DbSet<Dokument> Dokument { get; set; }
         public DbSet<DokumentProdukt> DokumentProdukt { get; set; }
@@ -40,6 +40,28 @@ namespace Inz.Entities
 
             modelBuilder.Entity<ProduktPrzyjecie>()
                 .HasKey(c => new { c.ProduktId, c.PrzyjecieId });
+
+            modelBuilder.Entity<Produkt>()
+                .Property(r => r.Nazwa)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Produkt>()
+                .Property(r => r.Cena)
+                .IsRequired();
+
+            modelBuilder.Entity<Produkt>()
+                .Property(r => r.KodEan)
+                .IsRequired()
+                .HasMaxLength(13);
+
+            modelBuilder.Entity<TypDokumentu>()
+                .Property(r => r.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Lokalizacja>()
+                .Property(r => r.Id)
+                .ValueGeneratedNever();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

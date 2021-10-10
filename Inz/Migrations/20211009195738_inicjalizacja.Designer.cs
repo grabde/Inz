@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inz.Migrations
 {
     [DbContext(typeof(InzDbContext))]
-    [Migration("20211007210141_mig1")]
-    partial class mig1
+    [Migration("20211009195738_inicjalizacja")]
+    partial class inicjalizacja
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -69,9 +69,7 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.Lokalizacja", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("NumerRegalu")
                         .HasColumnType("int");
@@ -104,13 +102,17 @@ namespace Inz.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KodEan")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<int?>("LokalizacjaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nazwa")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -161,9 +163,7 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.TypDokumentu", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Opis")
                         .HasColumnType("nvarchar(max)");

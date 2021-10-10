@@ -7,9 +7,8 @@ using Inz.Entities;
 
 namespace Inz.Models
 {
-    public class CreateProduktDto
+    public class UpdateProduktDto
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string Nazwa { get; set; }

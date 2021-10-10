@@ -12,22 +12,23 @@ namespace Inz.Mapper
     {
         public InzMappingProfile()
         {
-            this.CreateMap<Dokument, DokumentDto>()
-                .ForMember(m => m.TypDokumentu, c => c.MapFrom(s => s.TypDokumentu.Id));
-
-            this.CreateMap<CreateDokumentDto, Dokument>()
-                .ForMember(r => r.TypDokumentu, c => c.MapFrom(dto => new TypDokumentu()
-                {
-                    Id = dto.TypDokumentu
-                }));
+            this.CreateMap<Dokument, DokumentDto>();
 
             this.CreateMap<Przyjecie, PrzyjecieDto>();
 
-            this.CreateMap<CreatePrzyjecieDto, Przyjecie>();
-
             this.CreateMap<Produkt, ProduktDto>();
 
+            this.CreateMap<CreateDokumentDto, Dokument>();
+
+            this.CreateMap<CreatePrzyjecieDto, Przyjecie>();
+
             this.CreateMap<CreateProduktDto, Produkt>();
+
+            this.CreateMap<UpdateDokumentDto, Dokument>();
+
+            this.CreateMap<UpdatePrzyjecieDto, Przyjecie>();
+
+            this.CreateMap<UpdateProduktDto, Produkt>();
         }
     }
 }

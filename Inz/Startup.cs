@@ -1,4 +1,5 @@
 using Inz.Entities;
+using Inz.Seeder;
 using Inz.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,10 +34,11 @@ namespace Inz
             services.AddScoped<IProduktService, ProduktService>();
             services.AddDbContext<InzDbContext>();
             services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<InzSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, InzSeeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +55,8 @@ namespace Inz
             {
                 endpoints.MapControllers();
             });
+
+            seeder.Seed();
         }
     }
 }

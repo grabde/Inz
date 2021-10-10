@@ -15,23 +15,21 @@ namespace Inz.Controllers
     [Route("api/inz/")]
     public class DokumentController : ControllerBase
     {
-        private readonly ILogger<DokumentController> _logger;
         private readonly IDokumentService _service;
 
-        public DokumentController(ILogger<DokumentController> logger, IDokumentService dokumentService)
+        public DokumentController(IDokumentService dokumentService)
         {
-            this._logger = logger;
             this._service = dokumentService;
         }
 
         [HttpGet("dokumenty")]
         public ActionResult<IEnumerable<DokumentDto>> GetDokumenty()
         {
-            return this.Ok(_service.Get());
+            return this.Ok(_service.GetDokumenty());
         }
 
         [HttpGet("dokument/{id}")]
-        public ActionResult<IEnumerable<DokumentDto>> GetDokumentById([FromRoute] int id)
+        public ActionResult<DokumentDto> GetDokumentById([FromRoute] int id)
         {
             return this.Ok(_service.GetDokumentById(id));
         }
@@ -39,8 +37,48 @@ namespace Inz.Controllers
         [HttpPost("dokument")]
         public ActionResult CreateDokument([FromBody] CreateDokumentDto dto)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
             DokumentDto dokument = this._service.CreateDokument(dto);
             return this.Created($"/api/dokument/{dokument.Id}", dokument);
+        }
+
+        [HttpDelete("dokument/{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            bool isDeleted = this._service.Delete(id);
+
+            if (isDeleted)
+            {
+                return this.NoContent();
+            }
+            else
+            {
+                return this.NotFound();
+            }
+        }
+
+        [HttpPut("dokument/{id}")]
+        public ActionResult<DokumentDto> Update([FromBody] UpdateDokumentDto dto, [FromRoute] int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            DokumentDto dokument = this._service.Update(dto, id);
+
+            if (dokument != null)
+            {
+                return this.Ok(dokument);
+            }
+            else
+            {
+                return this.NotFound();
+            }
         }
     }
 }

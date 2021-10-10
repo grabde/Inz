@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Inz.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class inicjalizacja : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +11,7 @@ namespace Inz.Migrations
                 name: "Lokalizacja",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     NumerRegalu = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -40,8 +39,7 @@ namespace Inz.Migrations
                 name: "TypDokumentu",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Opis = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -55,12 +53,12 @@ namespace Inz.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nazwa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nazwa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IloscObecna = table.Column<int>(type: "int", nullable: false),
                     IloscZarezerwowana = table.Column<int>(type: "int", nullable: false),
                     IloscDostepna = table.Column<int>(type: "int", nullable: false),
                     Cena = table.Column<double>(type: "float", nullable: false),
-                    KodEan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KodEan = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Kategoria = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LokalizacjaId = table.Column<int>(type: "int", nullable: true)
                 },

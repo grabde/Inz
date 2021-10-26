@@ -14,19 +14,13 @@ namespace Inz.Mapper
         {
             this.CreateMap<Dokument, DokumentDto>();
 
-            this.CreateMap<Przyjecie, PrzyjecieDto>();
-
             this.CreateMap<Produkt, ProduktDto>();
 
             this.CreateMap<CreateDokumentDto, Dokument>();
 
-            this.CreateMap<CreatePrzyjecieDto, Przyjecie>();
-
             this.CreateMap<CreateProduktDto, Produkt>();
 
             this.CreateMap<UpdateDokumentDto, Dokument>();
-
-            this.CreateMap<UpdatePrzyjecieDto, Przyjecie>();
 
             this.CreateMap<UpdateProduktDto, Produkt>();
         }

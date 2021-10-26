@@ -3,10 +3,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Inz.Migrations
 {
-    public partial class inicjalizacja : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Kategoria",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nazwa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kategoria", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Kontrahent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nazwa = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Kontrahent", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Lokalizacja",
                 columns: table => new
@@ -20,19 +46,17 @@ namespace Inz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Przyjecie",
+                name: "Pracownik",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataPrzyjazdu = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataWypakowania = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    KtoWystawil = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    KtoObsluguje = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Imie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nazwisko = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Przyjecie", x => x.Id);
+                    table.PrimaryKey("PK_Pracownik", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,7 +64,7 @@ namespace Inz.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Opis = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Nazwa = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,14 +81,19 @@ namespace Inz.Migrations
                     IloscObecna = table.Column<int>(type: "int", nullable: false),
                     IloscZarezerwowana = table.Column<int>(type: "int", nullable: false),
                     IloscDostepna = table.Column<int>(type: "int", nullable: false),
-                    Cena = table.Column<double>(type: "float", nullable: false),
                     KodEan = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Kategoria = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LokalizacjaId = table.Column<int>(type: "int", nullable: true)
+                    LokalizacjaId = table.Column<int>(type: "int", nullable: true),
+                    KategoriaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Produkt", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Produkt_Kategoria_KategoriaId",
+                        column: x => x.KategoriaId,
+                        principalTable: "Kategoria",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Produkt_Lokalizacja_LokalizacjaId",
                         column: x => x.LokalizacjaId,
@@ -80,13 +109,33 @@ namespace Inz.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TypDokumentuId = table.Column<int>(type: "int", nullable: true),
-                    NazwaKonrahenta = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Ilosc = table.Column<int>(type: "int", nullable: false),
-                    KodEan = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false)
+                    KontrahentId = table.Column<int>(type: "int", nullable: true),
+                    DataWystawienia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataZatwierdzeniaPrzyjecia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    KtoWystawilId = table.Column<int>(type: "int", nullable: true),
+                    KtoZatwierdzilPrzyjalId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dokument", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dokument_Kontrahent_KontrahentId",
+                        column: x => x.KontrahentId,
+                        principalTable: "Kontrahent",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Dokument_Pracownik_KtoWystawilId",
+                        column: x => x.KtoWystawilId,
+                        principalTable: "Pracownik",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Dokument_Pracownik_KtoZatwierdzilPrzyjalId",
+                        column: x => x.KtoZatwierdzilPrzyjalId,
+                        principalTable: "Pracownik",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Dokument_TypDokumentu_TypDokumentuId",
                         column: x => x.TypDokumentuId,
@@ -96,35 +145,12 @@ namespace Inz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProduktPrzyjecie",
-                columns: table => new
-                {
-                    ProduktId = table.Column<int>(type: "int", nullable: false),
-                    PrzyjecieId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProduktPrzyjecie", x => new { x.ProduktId, x.PrzyjecieId });
-                    table.ForeignKey(
-                        name: "FK_ProduktPrzyjecie_Produkt_ProduktId",
-                        column: x => x.ProduktId,
-                        principalTable: "Produkt",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProduktPrzyjecie_Przyjecie_PrzyjecieId",
-                        column: x => x.PrzyjecieId,
-                        principalTable: "Przyjecie",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DokumentProdukt",
                 columns: table => new
                 {
                     DokumentId = table.Column<int>(type: "int", nullable: false),
-                    ProduktId = table.Column<int>(type: "int", nullable: false)
+                    ProduktId = table.Column<int>(type: "int", nullable: false),
+                    Ilosc = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,6 +170,21 @@ namespace Inz.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Dokument_KontrahentId",
+                table: "Dokument",
+                column: "KontrahentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dokument_KtoWystawilId",
+                table: "Dokument",
+                column: "KtoWystawilId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dokument_KtoZatwierdzilPrzyjalId",
+                table: "Dokument",
+                column: "KtoZatwierdzilPrzyjalId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Dokument_TypDokumentuId",
                 table: "Dokument",
                 column: "TypDokumentuId");
@@ -154,14 +195,14 @@ namespace Inz.Migrations
                 column: "ProduktId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Produkt_KategoriaId",
+                table: "Produkt",
+                column: "KategoriaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produkt_LokalizacjaId",
                 table: "Produkt",
                 column: "LokalizacjaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProduktPrzyjecie_PrzyjecieId",
-                table: "ProduktPrzyjecie",
-                column: "PrzyjecieId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -170,19 +211,22 @@ namespace Inz.Migrations
                 name: "DokumentProdukt");
 
             migrationBuilder.DropTable(
-                name: "ProduktPrzyjecie");
-
-            migrationBuilder.DropTable(
                 name: "Dokument");
 
             migrationBuilder.DropTable(
                 name: "Produkt");
 
             migrationBuilder.DropTable(
-                name: "Przyjecie");
+                name: "Kontrahent");
+
+            migrationBuilder.DropTable(
+                name: "Pracownik");
 
             migrationBuilder.DropTable(
                 name: "TypDokumentu");
+
+            migrationBuilder.DropTable(
+                name: "Kategoria");
 
             migrationBuilder.DropTable(
                 name: "Lokalizacja");

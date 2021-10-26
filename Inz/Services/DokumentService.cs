@@ -37,6 +37,9 @@ namespace Inz.Services
             var dokumenty = this._dbContext
                 .Dokument
                 .Include(r => r.TypDokumentu)
+                .Include(r => r.Kontrahent)
+                .Include(r => r.KtoWystawil)
+                .Include(r => r.KtoZatwierdzilPrzyjal)
                 .Include(r => r.Produkty)
                 .ToList();
 
@@ -49,6 +52,9 @@ namespace Inz.Services
             var dokument = this._dbContext
                 .Dokument
                 .Include(r => r.TypDokumentu)
+                .Include(r => r.Kontrahent)
+                .Include(r => r.KtoWystawil)
+                .Include(r => r.KtoZatwierdzilPrzyjal)
                 .Include(r => r.Produkty)
                 .FirstOrDefault(r => r.Id == id);
 
@@ -73,7 +79,34 @@ namespace Inz.Services
                     .FirstOrDefault(r => r.Id == dokument.TypDokumentu.Id);
             }
 
+            Kontrahent kontrahent = null;
+            if (dokument.Kontrahent != null)
+            {
+                kontrahent = this._dbContext
+                    .Kontrahent
+                    .FirstOrDefault(r => r.Id == dokument.Kontrahent.Id);
+            }
+
+            Pracownik ktoWystawil = null;
+            if (dokument.KtoWystawil != null)
+            {
+                ktoWystawil = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Id == dokument.KtoWystawil.Id);
+            }
+
+            Pracownik ktoZatwierdzilPrzyjal = null;
+            if (dokument.KtoZatwierdzilPrzyjal != null)
+            {
+                ktoZatwierdzilPrzyjal = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Id == dokument.KtoZatwierdzilPrzyjal.Id);
+            }
+
             dokument.TypDokumentu = null;
+            dokument.Kontrahent = null;
+            dokument.KtoWystawil = null;
+            dokument.KtoZatwierdzilPrzyjal = null;
             this._dbContext.Dokument.Add(dokument);
             this._dbContext.SaveChanges();
 
@@ -82,7 +115,12 @@ namespace Inz.Services
             dokument = this._dbContext
                 .Dokument
                 .FirstOrDefault(r => r.Id == dokument.Id);
+
             dokument.TypDokumentu = typDokumentu;
+            dokument.Kontrahent = kontrahent;
+            dokument.KtoWystawil = ktoWystawil;
+            dokument.KtoZatwierdzilPrzyjal = ktoZatwierdzilPrzyjal;
+
             this._dbContext.SaveChanges();
 
             var dokumentDto = this._mapper.Map<DokumentDto>(dokument);
@@ -118,15 +156,57 @@ namespace Inz.Services
                 typDokumentu = this._dbContext
                     .TypDokumentu
                     .FirstOrDefault(r => r.Id == dto.TypDokumentu.Id);
-                this._dbContext.SaveChanges();
             }
             else
             {
                 typDokumentu = this._dbContext
                     .TypDokumentu
-                    .FirstOrDefault(r => r.Opis == null);
-                this._dbContext.SaveChanges();
+                    .FirstOrDefault(r => r.Nazwa == null);
             }
+
+            Kontrahent kontrahent = new Kontrahent();
+            if (dto.Kontrahent != null)
+            {
+                kontrahent = this._dbContext
+                    .Kontrahent
+                    .FirstOrDefault(r => r.Id == dto.Kontrahent.Id);
+            }
+            else
+            {
+                kontrahent = this._dbContext
+                    .Kontrahent
+                    .FirstOrDefault(r => r.Nazwa == null);
+            }
+
+            Pracownik ktoWystawil = new Pracownik();
+            if (dto.KtoWystawil != null)
+            {
+                ktoWystawil = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Id == dto.KtoWystawil.Id);
+            }
+            else
+            {
+                ktoWystawil = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Imie == null);
+            }
+
+            Pracownik ktoZatwierdzilPrzyjal = new Pracownik();
+            if (dto.KtoZatwierdzilPrzyjal != null)
+            {
+                ktoZatwierdzilPrzyjal = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Id == dto.KtoZatwierdzilPrzyjal.Id);
+            }
+            else
+            {
+                ktoZatwierdzilPrzyjal = this._dbContext
+                    .Pracownik
+                    .FirstOrDefault(r => r.Imie == null);
+            }
+
+            this._dbContext.SaveChanges();
 
             var dokument = this._dbContext
                 .Dokument
@@ -138,9 +218,12 @@ namespace Inz.Services
             }
 
             dokument.TypDokumentu = typDokumentu;
-            dokument.NazwaKonrahenta = dto.NazwaKonrahenta;         
-            dokument.Ilosc = dto.Ilosc;         
-            dokument.KodEan = dto.KodEan;         
+            dokument.Kontrahent = kontrahent;
+            dokument.KtoWystawil = ktoWystawil;
+            dokument.KtoZatwierdzilPrzyjal = ktoZatwierdzilPrzyjal;
+            dokument.DataWystawienia = dto.DataWystawienia;
+            dokument.DataZatwierdzeniaPrzyjecia = dto.DataZatwierdzeniaPrzyjecia;
+
             this._dbContext.SaveChanges();
 
             var produkty = this._dbContext

@@ -14,41 +14,21 @@ namespace Inz.Entities
         public DbSet<DokumentProdukt> DokumentProdukt { get; set; }
         public DbSet<Lokalizacja> Lokalizacja { get; set; }
         public DbSet<Produkt> Produkt { get; set; }
-        public DbSet<ProduktPrzyjecie> ProduktPrzyjecie { get; set; }
-        public DbSet<Przyjecie> Przyjecie { get; set; }
+        public DbSet<Kontrahent> Kontrahent { get; set; }
+        public DbSet<Kategoria> Kategoria { get; set; }
+        public DbSet<Pracownik> Pracownik { get; set; }
         public DbSet<TypDokumentu> TypDokumentu { get; set; }
 
         //tutaj możemy dodać właściwości kolumn
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Dokument>()
-                .Property(r => r.NazwaKonrahenta)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            modelBuilder.Entity<Dokument>()
-                .Property(r => r.Ilosc)
-                .IsRequired();
-
-            modelBuilder.Entity<Dokument>()
-                .Property(r => r.KodEan)
-                .IsRequired()
-                .HasMaxLength(13);
-
             modelBuilder.Entity<DokumentProdukt>()
                 .HasKey(c => new { c.DokumentId, c.ProduktId });
-
-            modelBuilder.Entity<ProduktPrzyjecie>()
-                .HasKey(c => new { c.ProduktId, c.PrzyjecieId });
 
             modelBuilder.Entity<Produkt>()
                 .Property(r => r.Nazwa)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            modelBuilder.Entity<Produkt>()
-                .Property(r => r.Cena)
-                .IsRequired();
 
             modelBuilder.Entity<Produkt>()
                 .Property(r => r.KodEan)

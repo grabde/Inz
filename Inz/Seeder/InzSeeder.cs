@@ -18,78 +18,93 @@ namespace Inz.Seeder
         public void Seed()
         {
             if (this._dbContext.Database.CanConnect())
-            {   
-                if (!this._dbContext.Lokalizacja.Any())
-                {
-                    IEnumerable<Lokalizacja> lokalizacje = this.GetLokalizacje();
-                    this._dbContext.Lokalizacja.AddRange(lokalizacje);
-                    this._dbContext.SaveChanges();
-                }
-
+            {
                 if (!this._dbContext.TypDokumentu.Any())
                 {
                     IEnumerable<TypDokumentu> typyDokumentow = this.GetTypyDokumentow();
                     this._dbContext.TypDokumentu.AddRange(typyDokumentow);
                     this._dbContext.SaveChanges();
-                }
 
-                if (!this._dbContext.Dokument.Any())
-                {
-                    IEnumerable<Dokument> dokumenty = this.GetDokumenty();
-                    this._dbContext.Dokument.AddRange(dokumenty);
-                    this._dbContext.SaveChanges();
-
-                    dokumenty = this._dbContext.Dokument.ToList();
-                    var referencje = this.GetDokumentyReferencje();
-                    int index = 0;
-                    foreach (var item in referencje)
+                    if (!this._dbContext.Lokalizacja.Any())
                     {
-                        var dokument = dokumenty.ElementAt(index);
-                        index++;
-                        dokument.TypDokumentu = this._dbContext
-                            .TypDokumentu.FirstOrDefault(r => r.Id == item.TypDokumentu.Id);
+                        IEnumerable<Lokalizacja> lokalizacje = this.GetLokalizacje();
+                        this._dbContext.Lokalizacja.AddRange(lokalizacje);
+                        this._dbContext.SaveChanges();
                     }
-                    this._dbContext.SaveChanges();
-                }
 
-                if (!this._dbContext.Produkt.Any())
-                {
-                    IEnumerable<Produkt> produkty = this.GetProdukty();
-                    this._dbContext.Produkt.AddRange(produkty);
-                    this._dbContext.SaveChanges();
-
-                    produkty = this._dbContext.Produkt.ToList();
-                    var referencje = this.GetProduktyReferencje();
-                    int index = 0;
-                    foreach (var item in referencje)
+                    if (!this._dbContext.Kontrahent.Any())
                     {
-                        var dokument = produkty.ElementAt(index);
-                        index++;
-                        dokument.Lokalizacja = this._dbContext
-                            .Lokalizacja.FirstOrDefault(r => r.Id == item.Lokalizacja.Id);
+                        IEnumerable<Kontrahent> kontrahenci = this.GetKontrahenci();
+                        this._dbContext.Kontrahent.AddRange(kontrahenci);
+                        this._dbContext.SaveChanges();
                     }
-                    this._dbContext.SaveChanges();
-                }
 
-                if (!this._dbContext.Przyjecie.Any())
-                {
-                    IEnumerable<Przyjecie> przyjecia = this.GetPrzyjecia();
-                    this._dbContext.Przyjecie.AddRange(przyjecia);
-                    this._dbContext.SaveChanges();
-                }
+                    if (!this._dbContext.Pracownik.Any())
+                    {
+                        IEnumerable<Pracownik> pracownicy = this.GetPracownicy();
+                        this._dbContext.Pracownik.AddRange(pracownicy);
+                        this._dbContext.SaveChanges();
+                    }
 
-                if (!this._dbContext.DokumentProdukt.Any())
-                {
-                    IEnumerable<DokumentProdukt> dokumentProdukt = this.GetDokumentProdukt();
-                    this._dbContext.DokumentProdukt.AddRange(dokumentProdukt);
-                    this._dbContext.SaveChanges();
-                }
+                    if (!this._dbContext.Kategoria.Any())
+                    {
+                        IEnumerable<Kategoria> kategorie = this.GetKategorie();
+                        this._dbContext.Kategoria.AddRange(kategorie);
+                        this._dbContext.SaveChanges();
+                    }
 
-                if (!this._dbContext.ProduktPrzyjecie.Any())
-                {
-                    IEnumerable<ProduktPrzyjecie> produktPrzyjecie = this.GetProduktPrzyjecie();
-                    this._dbContext.ProduktPrzyjecie.AddRange(produktPrzyjecie);
-                    this._dbContext.SaveChanges();
+                    if (!this._dbContext.Dokument.Any())
+                    {
+                        IEnumerable<Dokument> dokumenty = this.GetDokumenty();
+                        this._dbContext.Dokument.AddRange(dokumenty);
+                        this._dbContext.SaveChanges();
+
+                        dokumenty = this._dbContext.Dokument.ToList();
+                        var referencje = this.GetDokumentyReferencje();
+                        int index = 0;
+                        foreach (var item in referencje)
+                        {
+                            var dokument = dokumenty.ElementAt(index);
+                            index++;
+                            dokument.TypDokumentu = this._dbContext
+                                .TypDokumentu.FirstOrDefault(r => r.Id == item.TypDokumentu.Id);
+                            dokument.Kontrahent = this._dbContext
+                                .Kontrahent.FirstOrDefault(r => r.Id == item.Kontrahent.Id);
+                            dokument.KtoWystawil = this._dbContext
+                                .Pracownik.FirstOrDefault(r => r.Id == item.KtoWystawil.Id);
+                            dokument.KtoZatwierdzilPrzyjal = this._dbContext
+                                .Pracownik.FirstOrDefault(r => r.Id == item.KtoZatwierdzilPrzyjal.Id);
+                        }
+                        this._dbContext.SaveChanges();
+                    }
+
+                    if (!this._dbContext.Produkt.Any())
+                    {
+                        IEnumerable<Produkt> produkty = this.GetProdukty();
+                        this._dbContext.Produkt.AddRange(produkty);
+                        this._dbContext.SaveChanges();
+
+                        produkty = this._dbContext.Produkt.ToList();
+                        var referencje = this.GetProduktyReferencje();
+                        int index = 0;
+                        foreach (var item in referencje)
+                        {
+                            var dokument = produkty.ElementAt(index);
+                            index++;
+                            dokument.Lokalizacja = this._dbContext
+                                .Lokalizacja.FirstOrDefault(r => r.Id == item.Lokalizacja.Id);
+                            dokument.Kategoria = this._dbContext
+                                .Kategoria.FirstOrDefault(r => r.Id == item.Kategoria.Id);
+                        }
+                        this._dbContext.SaveChanges();
+                    }
+
+                    if (!this._dbContext.DokumentProdukt.Any())
+                    {
+                        IEnumerable<DokumentProdukt> dokumentProdukt = this.GetDokumentProdukt();
+                        this._dbContext.DokumentProdukt.AddRange(dokumentProdukt);
+                        this._dbContext.SaveChanges();
+                    }
                 }
             }
         }
@@ -213,37 +228,140 @@ namespace Inz.Seeder
                 new TypDokumentu()
                 {
                     Id = 1,
-                    Opis = null
+                    Nazwa = null
                 },
                 new TypDokumentu()
                 {
                     Id = 2,
-                    Opis = "WZ"
+                    Nazwa = "WZ"
                 },
                 new TypDokumentu()
                 {
                     Id = 3,
-                    Opis = "RW"
+                    Nazwa = "RW"
                 },
                 new TypDokumentu()
                 {
                     Id = 4,
-                    Opis = "PW"
+                    Nazwa = "PW"
                 },
                 new TypDokumentu()
                 {
                     Id = 5,
-                    Opis = "MMW"
+                    Nazwa = "MMW"
                 },
                 new TypDokumentu()
                 {
                     Id = 6,
-                    Opis = "MMP"
+                    Nazwa = "MMP"
                 },
                 new TypDokumentu()
                 {
                     Id = 7,
-                    Opis = "ZK"
+                    Nazwa = "ZK"
+                }
+            };
+        }
+
+        private IEnumerable<Kontrahent> GetKontrahenci()
+        {
+            return new List<Kontrahent>()
+            {
+                new Kontrahent()
+                {
+                    Nazwa = "Biedronka"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = "Żabka"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = "Kaufland"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = "Netto"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = "Dino"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = "Lewiatan"
+                },
+                new Kontrahent()
+                {
+                    Nazwa = null
+                }
+            };
+        }
+
+        private IEnumerable<Pracownik> GetPracownicy()
+        {
+            return new List<Pracownik>()
+            {
+                new Pracownik()
+                {
+                    Imie = "Jan",
+                    Nazwisko = "Naj"
+                },
+                new Pracownik()
+                {
+                    Imie = "Denis",
+                    Nazwisko = "Sined"
+                },
+                new Pracownik()
+                {
+                    Imie = "Bartosz",
+                    Nazwisko = "Zsotrab"
+                },
+                new Pracownik()
+                {
+                    Imie = "Daniel",
+                    Nazwisko = "Leinad"
+                },
+                new Pracownik()
+                {
+                    Imie = "Tomasz",
+                    Nazwisko = "Zsamot"
+                },
+                new Pracownik()
+                {
+                    Imie = null,
+                    Nazwisko = null
+                }
+            };
+        }
+
+        private IEnumerable<Kategoria> GetKategorie()
+        {
+            return new List<Kategoria>()
+            {
+                new Kategoria()
+                {
+                    Nazwa = "Drewno"
+                },
+                new Kategoria()
+                {
+                    Nazwa = "Art. spożywcze"
+                },
+                new Kategoria()
+                {
+                    Nazwa = "Art. budowlane"
+                },
+                new Kategoria()
+                {
+                    Nazwa = "Chemia"
+                },
+                new Kategoria()
+                {
+                    Nazwa = "Farba"
+                },
+                new Kategoria()
+                {
+                    Nazwa = null
                 }
             };
         }
@@ -254,33 +372,28 @@ namespace Inz.Seeder
             {
                 new Dokument()
                 {
-                    NazwaKonrahenta = "Biedronka",
-                    Ilosc = 1,
-                    KodEan = "1"
+                    DataWystawienia = new DateTime(2021, 10, 09),
+                    DataZatwierdzeniaPrzyjecia = new DateTime(2021, 10, 09)
                 },
                 new Dokument()
                 {
-                    NazwaKonrahenta = "Żabka",
-                    Ilosc = 2,
-                    KodEan = "2"
+                    DataWystawienia = new DateTime(2021, 10, 10),
+                    DataZatwierdzeniaPrzyjecia = new DateTime(2021, 10, 10)
                 },
                 new Dokument()
                 {
-                    NazwaKonrahenta = "Kaufland",
-                    Ilosc = 3,
-                    KodEan = "3"
+                    DataWystawienia = new DateTime(2021, 11, 10),
+                    DataZatwierdzeniaPrzyjecia = new DateTime(2021, 11, 10)
                 },
                 new Dokument()
                 {
-                    NazwaKonrahenta = "Netto",
-                    Ilosc = 4,
-                    KodEan = "4"
+                    DataWystawienia = new DateTime(2022, 10, 10),
+                    DataZatwierdzeniaPrzyjecia = new DateTime(2022, 10, 10)
                 },
                 new Dokument()
                 {
-                    NazwaKonrahenta = "Dino",
-                    Ilosc = 5,
-                    KodEan = "5"
+                    DataWystawienia = new DateTime(2023, 10, 10),
+                    DataZatwierdzeniaPrzyjecia = new DateTime(2023, 10, 10)
                 }
             };
         }
@@ -289,26 +402,91 @@ namespace Inz.Seeder
         {
             var dokumentyList = this.GetDokumenty();
             var dokumentyArray = dokumentyList.ToArray();
-            dokumentyArray[0].TypDokumentu = new TypDokumentu() 
+            dokumentyArray[0].TypDokumentu = new TypDokumentu()
             {
                 Id = 1
             };
+            dokumentyArray[0].Kontrahent = new Kontrahent()
+            {
+                Id = 1
+            };
+            dokumentyArray[0].KtoWystawil = new Pracownik()
+            {
+                Id = 1
+            };
+            dokumentyArray[0].KtoZatwierdzilPrzyjal = new Pracownik()
+            {
+                Id = 1
+            };
+
             dokumentyArray[1].TypDokumentu = new TypDokumentu()
             {
                 Id = 2
             };
+            dokumentyArray[1].Kontrahent = new Kontrahent()
+            {
+                Id = 2
+            };
+            dokumentyArray[1].KtoWystawil = new Pracownik()
+            {
+                Id = 2
+            };
+            dokumentyArray[1].KtoZatwierdzilPrzyjal = new Pracownik()
+            {
+                Id = 2
+            };
+
             dokumentyArray[2].TypDokumentu = new TypDokumentu()
             {
                 Id = 3
             };
+            dokumentyArray[2].Kontrahent = new Kontrahent()
+            {
+                Id = 3
+            };
+            dokumentyArray[2].KtoWystawil = new Pracownik()
+            {
+                Id = 3
+            };
+            dokumentyArray[2].KtoZatwierdzilPrzyjal = new Pracownik()
+            {
+                Id = 3
+            };
+
             dokumentyArray[3].TypDokumentu = new TypDokumentu()
             {
                 Id = 4
             };
+            dokumentyArray[3].Kontrahent = new Kontrahent()
+            {
+                Id = 4
+            };
+            dokumentyArray[3].KtoWystawil = new Pracownik()
+            {
+                Id = 4
+            };
+            dokumentyArray[3].KtoZatwierdzilPrzyjal = new Pracownik()
+            {
+                Id = 4
+            };
+
             dokumentyArray[4].TypDokumentu = new TypDokumentu()
             {
                 Id = 2
             };
+            dokumentyArray[4].Kontrahent = new Kontrahent()
+            {
+                Id = 2
+            };
+            dokumentyArray[4].KtoWystawil = new Pracownik()
+            {
+                Id = 2
+            };
+            dokumentyArray[4].KtoZatwierdzilPrzyjal = new Pracownik()
+            {
+                Id = 2
+            };
+
             return dokumentyArray.ToList();
         }
 
@@ -322,9 +500,7 @@ namespace Inz.Seeder
                     IloscObecna = 200,
                     IloscZarezerwowana = 100,
                     IloscDostepna = 100,
-                    Cena = 59,
-                    KodEan = "123",
-                    Kategoria = "Drewno"
+                    KodEan = "123"
                 },
                 new Produkt()
                 {
@@ -332,9 +508,7 @@ namespace Inz.Seeder
                     IloscObecna = 50,
                     IloscZarezerwowana = 10,
                     IloscDostepna = 40,
-                    Cena = 2,
-                    KodEan = "456",
-                    Kategoria = "Art. spożywcze"
+                    KodEan = "456"
                 },
                 new Produkt()
                 {
@@ -342,9 +516,7 @@ namespace Inz.Seeder
                     IloscObecna = 0,
                     IloscZarezerwowana = 0,
                     IloscDostepna = 0,
-                    Cena = 0,
-                    KodEan = "",
-                    Kategoria = "Brak"
+                    KodEan = ""
                 },
                 new Produkt()
                 {
@@ -352,9 +524,7 @@ namespace Inz.Seeder
                     IloscObecna = 2,
                     IloscZarezerwowana = 1,
                     IloscDostepna = 1,
-                    Cena = 10000,
-                    KodEan = "789",
-                    Kategoria = "Art. budowlane"
+                    KodEan = "789"
                 },
                 new Produkt()
                 {
@@ -362,9 +532,7 @@ namespace Inz.Seeder
                     IloscObecna = 5,
                     IloscZarezerwowana = 1,
                     IloscDostepna = 4,
-                    Cena = 1002,
-                    KodEan = "11111111",
-                    Kategoria = "Chemia"
+                    KodEan = "11111111"
                 }
             };
         }
@@ -377,44 +545,48 @@ namespace Inz.Seeder
             {
                 Id = 1
             };
+            produktyArray[0].Kategoria = new Kategoria()
+            {
+                Id = 1
+            };
+
             produktyArray[1].Lokalizacja = new Lokalizacja()
             {
                 Id = 2
             };
+            produktyArray[1].Kategoria = new Kategoria()
+            {
+                Id = 2
+            };
+
             produktyArray[2].Lokalizacja = new Lokalizacja()
             {
                 Id = 0
             };
+            produktyArray[2].Kategoria = new Kategoria()
+            {
+                Id = 0
+            };
+
             produktyArray[3].Lokalizacja = new Lokalizacja()
             {
                 Id = 10
             };
+            produktyArray[3].Kategoria = new Kategoria()
+            {
+                Id = 3
+            };
+
             produktyArray[4].Lokalizacja = new Lokalizacja()
             {
                 Id = 5
             };
-            return produktyArray.ToList();
-        }
-
-        private IEnumerable<Przyjecie> GetPrzyjecia()
-        {
-            return new List<Przyjecie>()
+            produktyArray[4].Kategoria = new Kategoria()
             {
-                new Przyjecie()
-                {
-                    DataPrzyjazdu = new DateTime(2021, 10, 09),
-                    DataWypakowania = new DateTime(2021, 10, 09),
-                    KtoWystawil = "Jan Kowalski",
-                    KtoObsluguje = "Zbigniew Stonoga"
-                },
-                new Przyjecie()
-                {
-                    DataPrzyjazdu = new DateTime(2021, 10, 09),
-                    DataWypakowania = new DateTime(2021, 10, 09),
-                    KtoWystawil = "Jan Kowalski",
-                    KtoObsluguje = "Zbigniew Stonoga"
-                }
+                Id = 5
             };
+
+            return produktyArray.ToList();
         }
 
         private IEnumerable<DokumentProdukt> GetDokumentProdukt()
@@ -445,38 +617,6 @@ namespace Inz.Seeder
                 {
                     DokumentId = 5,
                     ProduktId = 5
-                }
-            };
-        }
-
-        private IEnumerable<ProduktPrzyjecie> GetProduktPrzyjecie()
-        {
-            return new List<ProduktPrzyjecie>()
-            {
-                new ProduktPrzyjecie()
-                {
-                    ProduktId = 1,
-                    PrzyjecieId = 1
-                },
-                new ProduktPrzyjecie()
-                {
-                    ProduktId = 2,
-                    PrzyjecieId = 1
-                },
-                new ProduktPrzyjecie()
-                {
-                    ProduktId = 3,
-                    PrzyjecieId = 2
-                },
-                new ProduktPrzyjecie()
-                {
-                    ProduktId = 4,
-                    PrzyjecieId = 2
-                },
-                new ProduktPrzyjecie()
-                {
-                    ProduktId = 5,
-                    PrzyjecieId = 2
                 }
             };
         }

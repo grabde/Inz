@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Inz.Entities
 {
-    public class TypDokumentu
+    public class Kontrahent
     {
         public int Id { get; set; }
         public string Nazwa { get; set; }

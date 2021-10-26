@@ -9,5 +9,6 @@ namespace Inz.Entities
     {
         public int DokumentId { get; set; }
         public int ProduktId { get; set; }
+        public int Ilosc { get; set; }
     }
 }

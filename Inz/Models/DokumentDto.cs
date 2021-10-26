@@ -9,10 +9,12 @@ namespace Inz.Models
     public class DokumentDto
     {
         public int Id { get; set; }
-        public TypDokumentu TypDokumentu { get; set; }
-        public string NazwaKonrahenta { get; set; }
-        public int Ilosc { get; set; }
-        public string KodEan { get; set; }
+        public virtual TypDokumentu TypDokumentu { get; set; }
+        public virtual Kontrahent Kontrahent { get; set; }
+        public DateTime DataWystawienia { get; set; }
+        public DateTime DataZatwierdzeniaPrzyjecia { get; set; }
+        public virtual Pracownik KtoWystawil { get; set; }
+        public virtual Pracownik KtoZatwierdzilPrzyjal { get; set; }
 
         public virtual List<DokumentProdukt> Produkty { get; set; }
     }

@@ -9,7 +9,6 @@ namespace Inz.Models
 {
     public class CreateProduktDto
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string Nazwa { get; set; }
@@ -17,15 +16,11 @@ namespace Inz.Models
         public int IloscZarezerwowana { get; set; }
         public int IloscDostepna { get; set; }
         [Required]
-        public double Cena { get; set; }
-        public virtual Lokalizacja Lokalizacja { get; set; }
-        [Required]
         [MaxLength(13)]
         public string KodEan { get; set; }
-        public string Kategoria { get; set; }
+        public virtual Lokalizacja Lokalizacja { get; set; }
+        public virtual Kategoria Kategoria { get; set; }
 
         public virtual List<DokumentProdukt> Dokumenty { get; set; }
-
-        public virtual List<ProduktPrzyjecie> Przyjecia { get; set; }
     }
 }

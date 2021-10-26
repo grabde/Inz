@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Inz.Entities
 {
-    public class ProduktPrzyjecie
+    public class Kategoria
     {
-        public int ProduktId { get; set; }
-        public int PrzyjecieId { get; set; }
+        public int Id { get; set; }
+        public string Nazwa { get; set; }
     }
 }

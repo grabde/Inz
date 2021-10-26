@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Inz.Entities
 {
-    public class TypDokumentu
+    public class Pracownik
     {
         public int Id { get; set; }
-        public string Nazwa { get; set; }
+        public string Imie { get; set; }
+        public string Nazwisko { get; set; }
     }
 }

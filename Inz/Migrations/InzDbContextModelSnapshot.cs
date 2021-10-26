@@ -26,23 +26,31 @@ namespace Inz.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Ilosc")
+                    b.Property<DateTime>("DataWystawienia")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataZatwierdzeniaPrzyjecia")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("KontrahentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("KodEan")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                    b.Property<int?>("KtoWystawilId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("NazwaKonrahenta")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int?>("KtoZatwierdzilPrzyjalId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("TypDokumentuId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KontrahentId");
+
+                    b.HasIndex("KtoWystawilId");
+
+                    b.HasIndex("KtoZatwierdzilPrzyjalId");
 
                     b.HasIndex("TypDokumentuId");
 
@@ -57,11 +65,44 @@ namespace Inz.Migrations
                     b.Property<int>("ProduktId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Ilosc")
+                        .HasColumnType("int");
+
                     b.HasKey("DokumentId", "ProduktId");
 
                     b.HasIndex("ProduktId");
 
                     b.ToTable("DokumentProdukt");
+                });
+
+            modelBuilder.Entity("Inz.Entities.Kategoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nazwa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kategoria");
+                });
+
+            modelBuilder.Entity("Inz.Entities.Kontrahent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nazwa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kontrahent");
                 });
 
             modelBuilder.Entity("Inz.Entities.Lokalizacja", b =>
@@ -77,15 +118,30 @@ namespace Inz.Migrations
                     b.ToTable("Lokalizacja");
                 });
 
-            modelBuilder.Entity("Inz.Entities.Produkt", b =>
+            modelBuilder.Entity("Inz.Entities.Pracownik", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("Cena")
-                        .HasColumnType("float");
+                    b.Property<string>("Imie")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nazwisko")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pracownik");
+                });
+
+            modelBuilder.Entity("Inz.Entities.Produkt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("IloscDostepna")
                         .HasColumnType("int");
@@ -96,8 +152,8 @@ namespace Inz.Migrations
                     b.Property<int>("IloscZarezerwowana")
                         .HasColumnType("int");
 
-                    b.Property<string>("Kategoria")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("KategoriaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("KodEan")
                         .IsRequired()
@@ -114,48 +170,11 @@ namespace Inz.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KategoriaId");
+
                     b.HasIndex("LokalizacjaId");
 
                     b.ToTable("Produkt");
-                });
-
-            modelBuilder.Entity("Inz.Entities.ProduktPrzyjecie", b =>
-                {
-                    b.Property<int>("ProduktId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PrzyjecieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProduktId", "PrzyjecieId");
-
-                    b.HasIndex("PrzyjecieId");
-
-                    b.ToTable("ProduktPrzyjecie");
-                });
-
-            modelBuilder.Entity("Inz.Entities.Przyjecie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DataPrzyjazdu")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataWypakowania")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("KtoObsluguje")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KtoWystawil")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Przyjecie");
                 });
 
             modelBuilder.Entity("Inz.Entities.TypDokumentu", b =>
@@ -163,7 +182,7 @@ namespace Inz.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Opis")
+                    b.Property<string>("Nazwa")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -173,9 +192,27 @@ namespace Inz.Migrations
 
             modelBuilder.Entity("Inz.Entities.Dokument", b =>
                 {
+                    b.HasOne("Inz.Entities.Kontrahent", "Kontrahent")
+                        .WithMany()
+                        .HasForeignKey("KontrahentId");
+
+                    b.HasOne("Inz.Entities.Pracownik", "KtoWystawil")
+                        .WithMany()
+                        .HasForeignKey("KtoWystawilId");
+
+                    b.HasOne("Inz.Entities.Pracownik", "KtoZatwierdzilPrzyjal")
+                        .WithMany()
+                        .HasForeignKey("KtoZatwierdzilPrzyjalId");
+
                     b.HasOne("Inz.Entities.TypDokumentu", "TypDokumentu")
                         .WithMany()
                         .HasForeignKey("TypDokumentuId");
+
+                    b.Navigation("Kontrahent");
+
+                    b.Navigation("KtoWystawil");
+
+                    b.Navigation("KtoZatwierdzilPrzyjal");
 
                     b.Navigation("TypDokumentu");
                 });
@@ -197,26 +234,17 @@ namespace Inz.Migrations
 
             modelBuilder.Entity("Inz.Entities.Produkt", b =>
                 {
+                    b.HasOne("Inz.Entities.Kategoria", "Kategoria")
+                        .WithMany()
+                        .HasForeignKey("KategoriaId");
+
                     b.HasOne("Inz.Entities.Lokalizacja", "Lokalizacja")
                         .WithMany()
                         .HasForeignKey("LokalizacjaId");
 
+                    b.Navigation("Kategoria");
+
                     b.Navigation("Lokalizacja");
-                });
-
-            modelBuilder.Entity("Inz.Entities.ProduktPrzyjecie", b =>
-                {
-                    b.HasOne("Inz.Entities.Produkt", null)
-                        .WithMany("Przyjecia")
-                        .HasForeignKey("ProduktId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Inz.Entities.Przyjecie", null)
-                        .WithMany("Produkty")
-                        .HasForeignKey("PrzyjecieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Inz.Entities.Dokument", b =>
@@ -227,13 +255,6 @@ namespace Inz.Migrations
             modelBuilder.Entity("Inz.Entities.Produkt", b =>
                 {
                     b.Navigation("Dokumenty");
-
-                    b.Navigation("Przyjecia");
-                });
-
-            modelBuilder.Entity("Inz.Entities.Przyjecie", b =>
-                {
-                    b.Navigation("Produkty");
                 });
 #pragma warning restore 612, 618
         }

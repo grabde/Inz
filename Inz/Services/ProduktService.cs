@@ -37,8 +37,8 @@ namespace Inz.Services
             var produkt = this._dbContext
                 .Produkt
                 .Include(r => r.Dokumenty)
-                .Include(r => r.Przyjecia)
                 .Include(r => r.Lokalizacja)
+                .Include(r => r.Kategoria)
                 .ToList();
 
             var produktDto = this._mapper.Map<List<ProduktDto>>(produkt);
@@ -50,8 +50,8 @@ namespace Inz.Services
             var produkt = this._dbContext
                 .Produkt
                 .Include(r => r.Dokumenty)
-                .Include(r => r.Przyjecia)
                 .Include(r => r.Lokalizacja)
+                .Include(r => r.Kategoria)
                 .FirstOrDefault(r => r.Id == id);
 
             if (produkt is null)
@@ -75,7 +75,16 @@ namespace Inz.Services
                     .FirstOrDefault(r => r.Id == produkt.Lokalizacja.Id);
             }
 
+            Kategoria kategoria = null;
+            if (produkt.Kategoria != null)
+            {
+                kategoria = this._dbContext
+                    .Kategoria
+                    .FirstOrDefault(r => r.Id == produkt.Kategoria.Id);
+            }
+
             produkt.Lokalizacja = null;
+            produkt.Kategoria = null;
             this._dbContext.Produkt.Add(produkt);
             this._dbContext.SaveChanges();
 
@@ -86,6 +95,7 @@ namespace Inz.Services
                 .FirstOrDefault(r => r.Id == produkt.Id);
 
             produkt.Lokalizacja = lokalizacja;
+            produkt.Kategoria = kategoria;
             this._dbContext.SaveChanges();
 
             var produktDto = this._mapper.Map<ProduktDto>(produkt);
@@ -131,6 +141,22 @@ namespace Inz.Services
                 this._dbContext.SaveChanges();
             }
 
+            Kategoria kategoria = new Kategoria();
+            if (dto.Kategoria != null)
+            {
+                kategoria = this._dbContext
+                    .Kategoria
+                    .FirstOrDefault(r => r.Id == dto.Kategoria.Id);
+                this._dbContext.SaveChanges();
+            }
+            else
+            {
+                kategoria = this._dbContext
+                    .Kategoria
+                    .FirstOrDefault(r => r.Nazwa == null);
+                this._dbContext.SaveChanges();
+            }
+
             var produkt = this._dbContext
                 .Produkt
                 .FirstOrDefault(r => r.Id == id);
@@ -144,10 +170,9 @@ namespace Inz.Services
             produkt.IloscObecna = dto.IloscObecna;
             produkt.IloscZarezerwowana = dto.IloscZarezerwowana;
             produkt.IloscDostepna = dto.IloscDostepna;
-            produkt.Cena = dto.Cena;
-            produkt.Lokalizacja = lokalizacja;
             produkt.KodEan = dto.KodEan;
-            produkt.Kategoria = dto.Kategoria;
+            produkt.Lokalizacja = lokalizacja;
+            produkt.Kategoria = kategoria;
             this._dbContext.SaveChanges();
 
             var dokumenty = this._dbContext
@@ -164,31 +189,6 @@ namespace Inz.Services
 
                 var doUsuniecia = dokumenty.Except(dto.Dokumenty);
                 var doWstawienia = dto.Dokumenty.Except(dokumenty);
-
-                this._dbContext.RemoveRange(doUsuniecia);
-                this._dbContext.AddRange(doWstawienia);
-            }
-            else
-            {
-                this._dbContext.RemoveRange(dokumenty);
-            }
-
-            this._dbContext.SaveChanges();
-
-            var przyjecia = this._dbContext
-                .ProduktPrzyjecie
-                .Where(r => r.ProduktId == id)
-                .ToList();
-
-            if (dto.Przyjecia != null)
-            {
-                foreach (var item in dto.Przyjecia)
-                {
-                    item.ProduktId = id;
-                }
-
-                var doUsuniecia = przyjecia.Except(dto.Przyjecia);
-                var doWstawienia = dto.Przyjecia.Except(przyjecia);
 
                 this._dbContext.RemoveRange(doUsuniecia);
                 this._dbContext.AddRange(doWstawienia);

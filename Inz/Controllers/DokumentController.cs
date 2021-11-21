@@ -34,6 +34,16 @@ namespace Inz.Controllers
             return this.Ok(_service.GetDokumentById(id));
         }
 
+        [HttpGet("dokument/pdf/{id}")]
+        public ActionResult<DokumentDto> GetDokumentPdfById([FromRoute] int id)
+        {   
+            //kiedy chcemy wyświetlić pdf w przeglądarce
+            return this.File(_service.GetDokumentPdfById(id), "application/pdf");
+            
+            //kiedy chcemy zewrócić tablice bajtów
+            //return this.Ok(_service.GetDokumentPdfById(id));
+        }
+
         [HttpPost("dokument")]
         public ActionResult CreateDokument([FromBody] CreateDokumentDto dto)
         {

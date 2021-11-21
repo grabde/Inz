@@ -65,3 +65,4 @@ C:\Users\denis\source\repos\Inz\Inz\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swag
 C:\Users\denis\source\repos\Inz\Inz\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\denis\source\repos\Inz\Inz\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\denis\source\repos\Inz\Inz\obj\Debug\net5.0\Inz.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\denis\source\repos\Inz\Inz\bin\Debug\net5.0\DinkToPdf.dll

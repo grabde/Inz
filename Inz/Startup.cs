@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Inz.Entities;
 using Inz.Middleware;
 using Inz.Seeder;
@@ -29,6 +31,7 @@ namespace Inz
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddControllers();
             services.AddScoped<IDokumentService, DokumentService>();
             services.AddScoped<IProduktService, ProduktService>();

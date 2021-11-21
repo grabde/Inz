@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Inz.Models;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Inz.Utility;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace Inz.Services
 {
@@ -15,6 +18,7 @@ namespace Inz.Services
     {
         public IEnumerable<DokumentDto> GetDokumenty();
         public DokumentDto GetDokumentById(int id);
+        public byte[] GetDokumentPdfById(int id);
         public DokumentDto CreateDokument(CreateDokumentDto dto);
         public bool Delete(int id);
         public DokumentDto Update(UpdateDokumentDto dto, int id);
@@ -24,12 +28,14 @@ namespace Inz.Services
         private readonly InzDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ILogger<DokumentService> _logger;
+        private readonly IConverter _converter;
 
-        public DokumentService(ILogger<DokumentService> logger, InzDbContext dbContext, IMapper mapper)
+        public DokumentService(ILogger<DokumentService> logger, InzDbContext dbContext, IMapper mapper, IConverter converter)
         {
             this._logger = logger;
             this._dbContext = dbContext;
             this._mapper = mapper;
+            this._converter = converter;
         }
         
         public IEnumerable<DokumentDto> GetDokumenty()
@@ -65,6 +71,54 @@ namespace Inz.Services
 
             var dokumentDto = this._mapper.Map<DokumentDto>(dokument);
             return dokumentDto;
+        }
+
+        public byte[] GetDokumentPdfById(int id)
+        {
+            var dokument = this._dbContext
+                .Dokument
+                .Include(r => r.TypDokumentu)
+                .Include(r => r.Kontrahent)
+                .Include(r => r.KtoWystawil)
+                .Include(r => r.KtoZatwierdzilPrzyjal)
+                .Include(r => r.Produkty)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (dokument is null)
+            {
+                return null;
+            }
+
+            var dokumentDto = this._mapper.Map<DokumentDto>(dokument);
+
+            //przerzucić dokument do znaczników HTML
+            string s = TemplateGenerator.GetHtmlString(dokumentDto);
+
+            //przetworzyć string html na dokument PDF
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = $"Dokument {dokumentDto.TypDokumentu.Nazwa}, id {dokumentDto.Id}"
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = s
+            };
+
+            var pdf = new HtmlToPdfDocument
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            byte[] file = this._converter.Convert(pdf);
+
+            return file;
         }
 
         public DokumentDto CreateDokument(CreateDokumentDto dto)

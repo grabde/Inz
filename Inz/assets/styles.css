@@ -1,0 +1,157 @@
+﻿
+
+#top {
+    width: auto;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.all {
+    width: 100%;
+    float: left;
+    background-color: white;
+    padding: 5px;
+}
+
+
+
+.top-right {
+    color: black;
+    padding: 10px;
+    width: 15%;
+    background-color: white;
+    float: right;
+    margin: 5px;
+    float: left;
+    height: 80px;
+}
+.top-left {
+    color: white;
+    padding: 10px;
+    width: 20%;
+    background-color: darkblue;
+    float: left;
+    margin: 5px;
+    float: left;
+    height: 92px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.Lee {
+    width: 80%;
+    float: left;
+    background-color: white;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.top-mid {
+    color: black;
+    padding: 10px;
+    width: 65%;
+    background-color: white;
+    margin: 5px;
+    float: left;
+    height: 25px;
+    font-size: 20px;
+    border-style: double;
+    border-color: black;
+}
+
+
+
+
+table {
+    clear: both;
+    width: 98%;
+    border-collapse: collapse;
+    margin-bottom: 260px;
+   
+}
+
+td, th {
+    border: 1px solid gray;
+    padding: 5px;
+    font-size: 22px;
+    text-align: center;
+}
+
+table th {
+    background-color: darkblue;
+    color: white;
+}
+
+.bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    color: white;
+   
+    padding: 10px;
+}
+
+.bottom-mid {
+    color: black;
+    padding: 10px;
+    width: 71%;
+    background-color: white;
+    margin: 5px;
+    float: left;
+    height: 25px;
+    font-size: 20px;
+    border-style: double;
+    border-color: black;
+}
+
+.bottom-box {
+    color: white;
+    padding: 10px;
+    width: 33%;
+    border: dotted;
+    border-color: black;
+    margin: 5px;
+    height: 80px;
+    float: left;
+}
+
+.bottom-date {
+    color: black;
+    padding: 10px;
+    width: 16%;
+    background-color: white;
+    margin: 5px;
+    float: left;
+    height: 25px;
+    text-align:left;
+    margin-left: 42px;
+}
+h1{
+    text-align:center;
+
+}
+
+.bottom-mid2 {
+    color: black;
+    padding: 10px;
+    width: 33%;
+    background-color: white;
+    margin: 5px;
+    float: left;
+    height: 25px;
+    font-size: 20px;
+}
+
+.bottom-podpis {
+    color: black;
+    padding: 10px;
+    width: 33%;
+    background-color: white;
+    margin: 5px;
+    float: left;
+    height: 25px;
+    font-size: 20px;
+    text-align: center;
+}

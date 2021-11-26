@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Inz.Utility;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using System.IO;
 
 namespace Inz.Services
 {
@@ -91,8 +92,14 @@ namespace Inz.Services
 
             var dokumentDto = this._mapper.Map<DokumentDto>(dokument);
 
-            //przerzucić dokument do znaczników HTML
-            string s = TemplateGenerator.GetHtmlString(dokumentDto);
+            var produkty = this._dbContext
+                .Produkt
+                .Include(r => r.Dokumenty)
+                .Include(r => r.Lokalizacja)
+                .Include(r => r.Kategoria)
+                .ToList();
+
+            var produktyDto = this._mapper.Map<List<ProduktDto>>(produkty);
 
             //przetworzyć string html na dokument PDF
             var globalSettings = new GlobalSettings
@@ -107,7 +114,9 @@ namespace Inz.Services
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
-                HtmlContent = s
+                HtmlContent = TemplateGenerator.GetHtmlString(dokumentDto, produktyDto),
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "strona [page] z [toPage]", Line = true }
             };
 
             var pdf = new HtmlToPdfDocument

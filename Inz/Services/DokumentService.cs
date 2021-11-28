@@ -108,7 +108,8 @@ namespace Inz.Services
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = $"Dokument {dokumentDto.TypDokumentu.Nazwa}, id {dokumentDto.Id}"
+                DocumentTitle = $"Dokument {dokumentDto.TypDokumentu.Nazwa}, id {dokumentDto.Id}",
+                Out = @"C:\bartek.pdf"
             };
 
             var objectSettings = new ObjectSettings
@@ -126,6 +127,7 @@ namespace Inz.Services
             };
 
             byte[] file = this._converter.Convert(pdf);
+            //this._converter.Convert(pdf);
 
             return file;
         }

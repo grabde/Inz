@@ -13,10 +13,11 @@ namespace Inz.Utility
         {
             var sb = new StringBuilder();
 
-            sb.Append(@"
+             sb.Append(@"
                         <!DOCTYPE HTML>
                         <html>
                             <head>
+                                
                             </head>
                             <body>
                                 <h1>Dokument# " + dokument.Id + "</h1>" +
@@ -29,7 +30,6 @@ namespace Inz.Utility
                                 "<div class='top-right'>Data wystawienia: " + dokument.DataWystawienia +
                                 "</div>"
             );
-
 
             sb.Append(@"     <div> <table align='center'>
                                     <tr>

@@ -43,7 +43,7 @@ namespace Inz.Controllers
         }
 
         [HttpGet("dokument/pdf/{id}")]
-        public ActionResult GetDokumentPdfById([FromRoute] int id)
+        public ActionResult<Plik> GetDokumentPdfById([FromRoute] int id)
         {
             //return this.File(_service.GetDokumentPdfById(id), "application/pdf");
             //return this.Ok(_service.GetDokumentPdfById(id));
@@ -51,7 +51,7 @@ namespace Inz.Controllers
             var dokument = this._service.GetDokumentById(id);
             var produkty = this._produkt.GetProdukty();
 
-            string sciezka = @"C:\pdf\bartek.pdf";
+            string sciezka = @"C:\pdf\1.pdf";
 
             //przetworzyć string html na dokument PDF
             var globalSettings = new GlobalSettings
@@ -61,13 +61,14 @@ namespace Inz.Controllers
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = $"Dokument {dokument.TypDokumentu.Nazwa}, id {dokument.Id}"
+                //Out = sciezka
             };
 
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
                 HtmlContent = TemplateGenerator.GetHtmlString(dokument, produkty),
-                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                WebSettings = { DefaultEncoding = "UTF-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
                 HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "strona [page] z [toPage]", Line = true }
             };
 
@@ -77,7 +78,10 @@ namespace Inz.Controllers
                 Objects = { objectSettings }
             };
 
+            //this._converter.Convert(pdf);
             byte[] file = this._converter.Convert(pdf);
+
+            string base64 = Convert.ToBase64String(file);
 
             //wczytać ponownie plik
 
@@ -87,7 +91,19 @@ namespace Inz.Controllers
 
             //return this.Ok(file);
 
-            return this.File(file, "application/octet-stream");
+            //Plik plik = new Plik();
+            //plik.BinTab = file;
+
+            //byte[] fileBytes = System.IO.File.ReadAllBytes(sciezka);
+
+            Plik plik = new Plik();
+            plik.plik_base64 = base64;
+            //plik.BinTab = fileBytes;
+
+            return this.Ok(plik);
+
+            //return this.File(file, "application/octet-stream;charset=UTF-8");
+            //return this.File(file, "application/octet-stream");
 
         }
 

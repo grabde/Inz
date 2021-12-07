@@ -35,6 +35,8 @@ namespace Inz
             services.AddControllers();
             services.AddScoped<IDokumentService, DokumentService>();
             services.AddScoped<IProduktService, ProduktService>();
+            services.AddScoped<IKontrahentService, KontrahentService>();
+            services.AddScoped<ITypDokumentuService, TypDokumentuService>();
             services.AddDbContext<InzDbContext>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<InzSeeder>();

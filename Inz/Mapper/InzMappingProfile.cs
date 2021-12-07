@@ -16,6 +16,10 @@ namespace Inz.Mapper
 
             this.CreateMap<Produkt, ProduktDto>();
 
+            this.CreateMap<Kontrahent, KontrahentDto>();
+
+            this.CreateMap<TypDokumentu, TypDokumentuDto>();
+
             this.CreateMap<CreateDokumentDto, Dokument>();
 
             this.CreateMap<CreateProduktDto, Produkt>();

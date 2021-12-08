@@ -20,14 +20,10 @@ namespace Inz.Controllers
     public class DokumentController : ControllerBase
     {
         private readonly IDokumentService _service;
-        private readonly IProduktService _produkt;
-        private readonly IConverter _converter;
 
-        public DokumentController(IDokumentService dokumentService, IProduktService produktService, IConverter converter)
+        public DokumentController(IDokumentService dokumentService)
         {
             this._service = dokumentService;
-            this._produkt = produktService;
-            this._converter = converter;
         }
 
         [HttpGet("dokumenty")]
@@ -45,44 +41,7 @@ namespace Inz.Controllers
         [HttpGet("dokument/pdf/{id}")]
         public ActionResult<Plik> GetDokumentPdfById([FromRoute] int id)
         {
-            //return this.File(_service.GetDokumentPdfById(id), "application/pdf");
-            //return this.Ok(_service.GetDokumentPdfById(id));
-
-            var dokument = this._service.GetDokumentById(id);
-            var produkty = this._produkt.GetProdukty();
-
-            //przetworzyć string html na dokument PDF
-            var globalSettings = new GlobalSettings
-            {
-                ColorMode = ColorMode.Color,
-                Orientation = Orientation.Portrait,
-                PaperSize = PaperKind.A4,
-                Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = $"Dokument {dokument.TypDokumentu.Nazwa}, id {dokument.Id}"
-            };
-
-            var objectSettings = new ObjectSettings
-            {
-                PagesCount = true,
-                HtmlContent = TemplateGenerator.GetHtmlString(dokument, produkty),
-                WebSettings = { DefaultEncoding = "UTF-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
-                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "strona [page] z [toPage]", Line = true }
-            };
-
-            var pdf = new HtmlToPdfDocument
-            {
-                GlobalSettings = globalSettings,
-                Objects = { objectSettings }
-            };
-
-            byte[] file = this._converter.Convert(pdf);
-
-            string base64 = Convert.ToBase64String(file);
-
-            Plik plik = new Plik();
-            plik.plik_base64 = base64;
-
-            return this.Ok(plik);
+            return this.Ok(_service.GetDokumentPdfById(id));
         }
 
         [HttpPost("dokument")]

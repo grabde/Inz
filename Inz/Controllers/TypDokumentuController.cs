@@ -27,7 +27,7 @@ namespace Inz.Controllers
         }
 
         [HttpGet("typy_dokumentow")]
-        public ActionResult<IEnumerable<TypDokumentuDto>> GetDokumenty()
+        public ActionResult<IEnumerable<TypDokumentuDto>> GetTypyDokumentow()
         {
             return this.Ok(_service.GetTypyDokumentow());
         }

@@ -20,6 +20,12 @@ namespace Inz.Mapper
 
             this.CreateMap<TypDokumentu, TypDokumentuDto>();
 
+            this.CreateMap<Pracownik, PracownikDto>();
+
+            this.CreateMap<Kategoria, KategoriaDto>();
+
+            this.CreateMap<Lokalizacja, LokalizacjaDto>();
+
             this.CreateMap<CreateDokumentDto, Dokument>();
 
             this.CreateMap<CreateProduktDto, Produkt>();

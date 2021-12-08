@@ -19,7 +19,7 @@ namespace Inz.Services
     {
         public IEnumerable<DokumentDto> GetDokumenty();
         public DokumentDto GetDokumentById(int id);
-        public byte[] GetDokumentPdfById(int id);
+        public Plik GetDokumentPdfById(int id);
         public DokumentDto CreateDokument(CreateDokumentDto dto);
         public bool Delete(int id);
         public DokumentDto Update(UpdateDokumentDto dto, int id);
@@ -74,7 +74,7 @@ namespace Inz.Services
             return dokumentDto;
         }
 
-        public byte[] GetDokumentPdfById(int id)
+        public Plik GetDokumentPdfById(int id)
         {
             var dokument = this._dbContext
                 .Dokument
@@ -108,15 +108,14 @@ namespace Inz.Services
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = $"Dokument {dokumentDto.TypDokumentu.Nazwa}, id {dokumentDto.Id}",
-                Out = @"C:\bartek.pdf"
+                DocumentTitle = $"Dokument {dokument.TypDokumentu.Nazwa}, id {dokument.Id}"
             };
 
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
                 HtmlContent = TemplateGenerator.GetHtmlString(dokumentDto, produktyDto),
-                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                WebSettings = { DefaultEncoding = "UTF-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
                 HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "strona [page] z [toPage]", Line = true }
             };
 
@@ -127,9 +126,13 @@ namespace Inz.Services
             };
 
             byte[] file = this._converter.Convert(pdf);
-            //this._converter.Convert(pdf);
 
-            return file;
+            string base64 = Convert.ToBase64String(file);
+
+            Plik plik = new Plik();
+            plik.plik_base64 = base64;
+
+            return plik;
         }
 
         public DokumentDto CreateDokument(CreateDokumentDto dto)

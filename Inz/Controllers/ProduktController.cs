@@ -23,7 +23,7 @@ namespace Inz.Controllers
         }
 
         [HttpGet("produkty")]
-        public ActionResult<IEnumerable<ProduktDto>> GetPrzyjecia()
+        public ActionResult<IEnumerable<ProduktDto>> GetProdukty()
         {
             return this.Ok(_service.GetProdukty());
         }

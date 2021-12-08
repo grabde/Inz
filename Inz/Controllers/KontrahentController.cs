@@ -27,13 +27,13 @@ namespace Inz.Controllers
         }
 
         [HttpGet("kontrahenci")]
-        public ActionResult<IEnumerable<KontrahentDto>> GetDokumenty()
+        public ActionResult<IEnumerable<KontrahentDto>> GetKontrahenci()
         {
             return this.Ok(_service.GetKontrahenci());
         }
 
         [HttpGet("kontrahent/{id}")]
-        public ActionResult<KontrahentDto> GetDokumentById([FromRoute] int id)
+        public ActionResult<KontrahentDto> GetKontrahentById([FromRoute] int id)
         {
             return this.Ok(_service.GetKontrahentById(id));
         }

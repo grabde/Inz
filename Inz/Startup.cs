@@ -37,6 +37,9 @@ namespace Inz
             services.AddScoped<IProduktService, ProduktService>();
             services.AddScoped<IKontrahentService, KontrahentService>();
             services.AddScoped<ITypDokumentuService, TypDokumentuService>();
+            services.AddScoped<IPracownikService, PracownikService>();
+            services.AddScoped<IKategoriaService, KategoriaService>();
+            services.AddScoped<ILokalizacjaService, LokalizacjaService>();
             services.AddDbContext<InzDbContext>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<InzSeeder>();

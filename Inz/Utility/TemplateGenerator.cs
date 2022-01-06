@@ -25,7 +25,7 @@ namespace Inz.Utility
                                 "<div class='Lee'>" +
                                     "<div class='top-left'> Dokument: " + dokument.TypDokumentu.Nazwa + "</div>" +
                                     "<div class='top-mid'>Wystawił(a): " + dokument.KtoWystawil.Imie + " " + dokument.KtoWystawil.Nazwisko + "</div>" +
-                                    "<div class='top-mid'>Kontrachent: " + dokument.Kontrahent.Nazwa + " </div>" +
+                                    "<div class='top-mid'>Kontrahent: " + dokument.Kontrahent.Nazwa + " </div>" +
                                 " </div>" +
                                 "<div class='top-right'>Data wystawienia: " + dokument.DataWystawienia +
                                 "</div>"
